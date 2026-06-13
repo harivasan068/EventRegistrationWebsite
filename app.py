@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, session, send_file,
 from flask_mail import Mail, Message
 from authlib.integrations.flask_client import OAuth
 from flask import session, url_for
+from dotenv import load_dotenv
+load_dotenv()
 
 import sqlite3
 import pandas as pd
@@ -20,12 +22,12 @@ oauth = OAuth(app)
 
 google = oauth.register(
 name='google',
-client_id='213890701257-beml8qntavr0e5mted5uc6al2qfsdpku.apps.googleusercontent.com',
-client_secret='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',
-server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-client_kwargs={
-'scope': 'openid email profile'
-}
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={
+        'scope': 'openid email profile'
+    }
 )
 
 
