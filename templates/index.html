@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <style>
+.card-img-top{
+    height:250px;
+    object-fit:cover;
+}
+</style>
+
+    <!DOCTYPE html>
+
+<html lang="en">
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Event Registration Portal</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+<div id="loader">
+
+    <div class="spinner"></div>
+
+</div>
+
+<body>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+
+<div class="container">
+
+    <a class="navbar-brand fw-bold" href="/">
+
+        <i class="bi bi-calendar-event"></i>
+
+        Event Portal
+
+    </a>
+
+    <div>
+
+<button id="darkModeBtn"
+        class="btn btn-light me-2">
+    🌙
+</button>
+
+{% if session.get('user_name') %}
+
+    <span class="text-white me-3">
+
+        👋 {{ session['user_name'] }}
+
+    </span>
+
+    <a href="/register"
+       class="btn btn-primary me-2">
+
+        Register
+
+    </a>
+
+    <a href="/google_logout"
+       class="btn btn-danger">
+
+        Logout
+
+    </a>
+
+{% else %}
+
+    <a href="/google_login"
+       class="btn btn-light">
+
+        <i class="bi bi-google"></i>
+
+        Sign in with Google
+
+    </a>
+
+{% endif %}
+```
+
+</div>
+
+
+</div>
+
+</nav>
+
+<!-- Hero Section -->
+
+<section class="hero-section"
+         data-aos="fade-up">
+
+<div class="circle one"></div>
+
+<div class="circle two"></div>
+
+<div class="container text-center">
+
+    <h1 class="hero-title">
+
+        Join The Biggest
+
+        <span class="text-warning">
+            Tech Events
+        </span>
+
+        Of 2026
+
+    </h1>
+
+    <p class="hero-subtitle">
+
+        Register instantly, receive your QR Pass,
+        and enjoy a seamless event experience.
+
+    </p>
+
+    <div class="mt-4">
+
+        <a href="/register"
+           class="btn btn-light btn-lg me-3">
+
+            <i class="bi bi-person-plus-fill"></i>
+
+            Register Now
+
+        </a>
+
+        <a href="#events"
+           class="btn btn-outline-light btn-lg">
+
+            Explore Events
+
+        </a>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- Statistics -->
+
+<section class="container mt-5">
+
+<div class="row text-center">
+
+    <div class="col-md-4 mb-3"
+         data-aos="fade-right">
+
+        <div class="dashboard-card bg-primary">
+
+            <i class="bi bi-people-fill fs-1"></i>
+
+           <h2 id="participants">0</h2>
+
+            <p>Participants</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3"
+         data-aos="fade-up">
+
+        <div class="dashboard-card bg-success">
+
+            <i class="bi bi-calendar-event fs-1"></i>
+
+            <h2>3</h2>
+
+            <p>Major Events</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3"
+         data-aos="fade-left">
+
+        <div class="dashboard-card bg-danger">
+
+            <i class="bi bi-award-fill fs-1"></i>
+
+            <h2>₹50K+</h2>
+
+            <p>Prize Pool</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- Events Section -->
+
+<section id="events"
+         class="container mt-5">
+
+<h2 class="text-center fw-bold mb-5"
+    data-aos="fade-up">
+
+    Featured Events
+
+</h2>
+
+<div class="row">
+
+    <!-- Tech Fest -->
+
+    <div class="col-md-4 mb-4"
+         data-aos="zoom-in">
+
+        <div class="card event-card shadow">
+
+            <img src="{{ url_for('static', filename='images/techfest.jpg') }}"
+                 class="card-img-top"
+                 alt="Tech Fest">
+
+            <div class="card-body">
+
+                <h4>Tech Fest 2026</h4>
+
+                <p>
+
+                    Annual technical symposium featuring
+                    coding, innovation and engineering
+                    competitions.
+
+                </p>
+
+                <a href="/register"
+                   class="btn btn-primary">
+
+                    Register
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI Workshop -->
+
+    <div class="col-md-4 mb-4"
+         data-aos="fade-up">
+
+        <div class="card event-card shadow">
+
+            <img src="{{ url_for('static', filename='images/aiworkshop.jpeg') }}"
+                 class="card-img-top"
+                 alt="AI Workshop">
+
+            <div class="card-body">
+
+                <h4>AI Workshop</h4>
+
+                <p>
+
+                    Learn AI, Machine Learning and
+                    Generative AI from industry experts.
+
+                </p>
+
+                <a href="/register"
+                   class="btn btn-success">
+
+                    Register
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Hackathon -->
+
+    <div class="col-md-4 mb-4"
+         data-aos="flip-left">
+
+        <div class="card event-card shadow">
+
+            <img src="{{ url_for('static', filename='images/hackathon.jpg') }}"
+                 class="card-img-top"
+                 alt="Hackathon">
+
+            <div class="card-body">
+
+                <h4>24-Hour Hackathon</h4>
+
+                <p>
+
+                    Build innovative solutions and compete
+                    for exciting prizes.
+
+                </p>
+
+                <a href="/register"
+                   class="btn btn-danger">
+
+                    Register
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- Footer -->
+
+<footer class="footer mt-5">
+
+<div class="container text-center">
+
+    <h4>
+
+        <i class="bi bi-calendar-event"></i>
+
+        Event Registration Portal
+
+    </h4>
+
+    <p>
+
+        QR Registration • Attendance Tracking
+        • Analytics Dashboard
+
+    </p>
+
+    <p>
+
+        © 2026 Developed by Hari Vasan
+
+    </p>
+
+</div>
+
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+
+AOS.init({
+
+    duration:1000,
+
+    once:true
+
+});
+
+</script>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>

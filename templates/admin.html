@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+      href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h3>
+    <i class="bi bi-calendar-event"></i>
+    Event Portal
+</h3>
+
+<a href="/admin">
+    <i class="bi bi-speedometer2"></i>
+    Dashboard
+</a>
+
+<a href="/attendance_records">
+    <i class="bi bi-list-check"></i>
+    Attendance
+</a>
+
+<a href="/mobile_scanner">
+    <i class="bi bi-phone"></i>
+    Mobile Scanner
+</a>
+
+<a href="/start_scanner">
+    <i class="bi bi-qr-code-scan"></i>
+    QR Scanner
+</a>
+
+<a href="/export">
+    <i class="bi bi-file-earmark-excel"></i>
+    Export Data
+</a>
+
+<div class="sidebar-profile">
+
+    <hr>
+
+    <div class="text-center">
+
+        <i class="bi bi-person-circle fs-1"></i>
+
+        <h6 class="mt-2">
+            Admin
+        </h6>
+
+        <a href="/logout"
+           class="btn btn-danger btn-sm mt-2">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="main-content">
+
+<h2 class="mb-4">
+    <i class="bi bi-speedometer2"></i>
+    Admin Dashboard
+</h2>
+
+<div class="row mb-4">
+
+    <div class="col-md-3 mb-3"
+         data-aos="fade-right">
+
+        <div class="dashboard-card bg-primary">
+
+            <i class="bi bi-people-fill fs-1"></i>
+
+            <h2>{{ total }}</h2>
+
+            <p>Total Registrations</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-3"
+         data-aos="fade-up">
+
+        <div class="dashboard-card bg-success">
+
+            <i class="bi bi-calendar-event fs-1"></i>
+
+            <h2>{{ techfest_attendance }}</h2>
+
+            <p>Tech Fest Attendance</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-3"
+         data-aos="fade-down">
+
+        <div class="dashboard-card bg-warning">
+
+            <i class="bi bi-robot fs-1"></i>
+
+            <h2>{{ aiworkshop_attendance }}</h2>
+
+            <p>AI Workshop Attendance</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-3"
+         data-aos="fade-left">
+
+        <div class="dashboard-card bg-danger">
+
+            <i class="bi bi-code-slash fs-1"></i>
+
+            <h2>{{ hackathon_attendance }}</h2>
+
+            <p>Hackathon Attendance</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <form method="GET" action="/admin">
+
+            <div class="input-group mb-4">
+
+                <input type="text"
+                       class="form-control"
+                       name="search"
+                       placeholder="Search by Name, Email or Phone"
+                       value="{{ search }}">
+
+                <button class="btn btn-primary">
+
+                    <i class="bi bi-search"></i>
+                    Search
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <div class="mb-4">
+
+            <a href="/export"
+               class="btn btn-success me-2">
+
+                Export Registrations
+
+            </a>
+
+            <a href="/export_attendance"
+               class="btn btn-warning">
+
+                Export Attendance
+
+            </a>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Event</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in data %}
+
+                    <tr>
+
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+
+                        <td>
+
+                            <a href="/delete/{{ row[0] }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Delete this registration?')">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow"
+     data-aos="zoom-in">
+
+    <div class="card-body">
+
+        <h4 class="text-center mb-4">
+            Event Attendance Analytics
+        </h4>
+
+        <canvas id="attendanceChart"></canvas>
+
+    </div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('attendanceChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+            'Tech Fest',
+            'AI Workshop',
+            'Hackathon'
+        ],
+
+        datasets: [{
+
+            data: [
+                {{ techfest_attendance }},
+                {{ aiworkshop_attendance }},
+                {{ hackathon_attendance }}
+            ]
+
+        }]
+
+    }
+
+});
+
+</script>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+
+AOS.init({
+    duration:1000,
+    once:true
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>
