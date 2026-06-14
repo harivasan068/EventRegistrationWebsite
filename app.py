@@ -15,12 +15,32 @@ app = Flask(__name__)
 
 app.secret_key = "eventportal123"
 
+# ADD THIS BELOW
+def init_db():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS attendance(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        event TEXT,
+        status TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# OAuth starts here
 oauth = OAuth(app)
 
 google = oauth.register(
     name='google',
-    client_id=os.getenv('213890701257-beml8qntavr0e5mted5uc6al2qfsdpku.apps.googleusercontent.com'),
-    client_secret=os.getenv('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'),
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={
         'scope': 'openid email profile'
@@ -78,14 +98,13 @@ def register():
         """)
 
         cursor.execute("""
-INSERT INTO registrations(name,email,phone,event)
-VALUES(?,?,?,?)
-""", (name, email, phone, event))
+        INSERT INTO registrations(name,email,phone,event)
+        VALUES(?,?,?,?)
+        """, (name, email, phone, event))
 
         conn.commit()
         conn.close()
 
-        # Generate QR Code
         qr_data = f"""
 Name: {name}
 Email: {email}
@@ -106,43 +125,7 @@ Event: {event}
         )
 
         img.save(filepath)
-        
-                # Send Email with QR Attachment
-        try:
 
-            msg = Message(
-                "Event Registration Successful",
-                sender=app.config['MAIL_USERNAME'],
-                recipients=[email]
-            )
-
-            msg.body = f"""
-Hello {name},
-
-Thank you for registering for Tech Fest 2026.
-
-Your registration has been confirmed.
-
-Your QR code is attached with this email.
-
-Regards,
-Event Registration Team
-"""
-
-            with app.open_resource(filepath) as qr_file:
-                msg.attach(
-                    filename,
-                    "image/png",
-                    qr_file.read()
-                )
-
-            mail.send(msg)
-
-            print("EMAIL SENT SUCCESSFULLY")
-
-        except Exception as e:
-
-            print("EMAIL ERROR:", e)
         return render_template(
             "success.html",
             qr_image=filename
@@ -422,74 +405,6 @@ def scan_qr():
 # RUN APP
 # ==========================
 
-
-@app.route('/start_scanner')
-def start_scanner():
-
-    cap = cv2.VideoCapture(0)
-
-    detector = cv2.QRCodeDetector()
-
-    while True:
-
-        success, frame = cap.read()
-
-        if not success:
-            break
-
-        data, bbox, _ = detector.detectAndDecode(frame)
-
-        if data:
-
-            lines = data.strip().split('\n')
-
-            name = lines[0].replace("Name:", "").strip()
-            event = lines[3].replace("Event:", "").strip()
-
-            conn = sqlite3.connect('database.db')
-            cursor = conn.cursor()
-
-            cursor.execute(
-                "SELECT * FROM attendance WHERE name=?",
-                (name,)
-            )
-
-            existing = cursor.fetchone()
-
-            if existing:
-
-                conn.close()
-
-                cap.release()
-                cv2.destroyAllWindows()
-
-                return f"{name} has already marked attendance"
-
-            else:
-
-                cursor.execute("""
-                INSERT INTO attendance(name,event,status)
-                VALUES(?,?,?)
-                """, (name, event, "Present"))
-
-                conn.commit()
-
-                conn.close()
-
-                cap.release()
-                cv2.destroyAllWindows()
-
-                return f"{name} Attendance Marked Successfully"
-
-        cv2.imshow("QR Attendance Scanner", frame)
-
-        if cv2.waitKey(1) == 27:
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-    return "Scanner Closed"
 @app.route('/reset_attendance')
 def reset_attendance():
 
