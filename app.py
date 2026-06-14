@@ -11,19 +11,16 @@ import pandas as pd
 import qrcode
 import os
 
-
-
-app = Flask(__name__)  
-
+app = Flask(__name__)
 
 app.secret_key = "eventportal123"
 
 oauth = OAuth(app)
 
 google = oauth.register(
-name='google',
-    client_id=os.getenv('213890701257-beml8qntavr0e5mted5uc6al2qfsdpku.apps.googleusercontent.com'),
-    client_secret=os.getenv('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'),
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={
         'scope': 'openid email profile'
