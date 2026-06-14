@@ -10,7 +10,7 @@ import sqlite3
 import pandas as pd
 import qrcode
 import os
-import winsound
+
 
 
 app = Flask(__name__)  
@@ -461,8 +461,6 @@ def start_scanner():
 
             if existing:
 
-                winsound.Beep(800, 300)
-
                 conn.close()
 
                 cap.release()
@@ -478,8 +476,6 @@ def start_scanner():
                 """, (name, event, "Present"))
 
                 conn.commit()
-
-                winsound.Beep(1500, 500)
 
                 conn.close()
 
@@ -497,7 +493,6 @@ def start_scanner():
     cv2.destroyAllWindows()
 
     return "Scanner Closed"
-
 @app.route('/reset_attendance')
 def reset_attendance():
 
